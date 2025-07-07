@@ -23,8 +23,7 @@
         "noUnusedParameters": false,
         "noPropertyAccessFromIndexSignature": false,
 
-        "outDir": "./dist",
-        "types": ["@cloudflare/workers-types"]
+        "outDir": "./dist"
     },
     "include": ["./src/*"],
     "exclude": ["dist", "build.ts", "node_modules"]

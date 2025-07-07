@@ -1,6 +1,6 @@
 {
     "name": "better-auth-microsoft-graph",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Microsoft Graph integration plugin for Better Auth",
     "author": "Zach Grimaldi",
     "repository": {
