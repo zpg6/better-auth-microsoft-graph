@@ -1,5 +1,4 @@
 import type { AuthContext } from "better-auth";
-import { createAuthEndpoint, sessionMiddleware } from "better-auth/api";
 
 export const ERROR_CODES = {
     ACCOUNT_NOT_FOUND: "Microsoft account not found for user",
@@ -37,39 +36,6 @@ export interface GraphApiParams {
     params?: Record<string, string>;
     /** Optional request body for POST/PATCH requests */
     body?: any;
-}
-
-/**
- * Helper function to create standardized Microsoft Graph endpoints for Better Auth
- */
-export const createGraphEndpoint = (path: string, handler: any) => {
-    return createAuthEndpoint(
-        path,
-        {
-            method: "GET",
-            middleware: [sessionMiddleware],
-        },
-        async ctx => {
-            return handler(ctx.context);
-        }
-    );
-};
-
-/**
- * Creates a custom Microsoft Graph API endpoint handler for flexible requests
- *
- * @param config - Configuration for the custom endpoint
- * @returns A function that makes the Graph API request
- */
-export function createCustomGraphEndpoint(config: GraphApiParams, debugLogs: boolean) {
-    return async (ctx: AuthContext): Promise<GraphApiResult<any>> => {
-        return makeGraphRequest(ctx, config.endpoint, debugLogs, {
-            method: config.method || "GET",
-            responseType: "single",
-            params: config.params,
-            body: config.body,
-        });
-    };
 }
 
 /**
@@ -278,10 +244,3 @@ export async function makeGraphRequest<E extends string, TResponse>(
         };
     }
 }
-
-/**
- * Server-side handler: Create custom Graph API endpoint with flexible configuration
- */
-export const custom = (config: GraphApiParams, debugLogs: boolean) => {
-    return createCustomGraphEndpoint(config, debugLogs);
-};
