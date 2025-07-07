@@ -1,0 +1,35 @@
+# For more details on how to configure Wrangler, refer to:
+# https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "better-auth-mg"
+main = ".open-next/worker.js"
+compatibility_date = "2025-03-01"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+
+[assets]
+binding = "ASSETS"
+directory = ".open-next/assets"
+
+[observability]
+enabled = true
+
+[placement]
+mode = "smart"
+
+[[d1_databases]]
+binding = "DATABASE"
+database_name = "your-db-name"
+database_id = "your-db-id"
+migrations_dir = "drizzle"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "your-kv-id"
+
+
+# To protect the database id, kv id, and r2 bucket name, we ignore this
+# file when committing to the repo by running once:
+# git update-index --assume-unchanged wrangler.toml
+#
+# Put back in git if you need to commit this file:
+# git update-index --no-assume-unchanged wrangler.toml
