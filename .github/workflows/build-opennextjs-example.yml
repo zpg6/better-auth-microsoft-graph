@@ -49,4 +49,4 @@ jobs:
 
             - name: Build Example (OpenNextJS)
               working-directory: examples/opennextjs
-              run: pnpm build:cf
+              run: export MICROSOFT_CLIENT_ID="abc123" && export MICROSOFT_CLIENT_SECRET="abc123" && pnpm build:cf
