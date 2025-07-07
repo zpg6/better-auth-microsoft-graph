@@ -1,6 +1,6 @@
 {
     "name": "better-auth-microsoft-graph",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Microsoft Graph integration plugin for Better Auth",
     "author": "Zach Grimaldi",
     "repository": {
@@ -17,7 +17,8 @@
         "calendar",
         "contacts",
         "mail",
-        "outlook"
+        "outlook",
+        "oauth"
     ],
     "license": "MIT",
     "files": [

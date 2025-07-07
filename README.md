@@ -34,6 +34,7 @@ export const auth = betterAuth({
         microsoft: {
             clientId: process.env.MICROSOFT_CLIENT_ID!,
             clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
+            scopes: ["User.Read", "Calendars.Read", "Contacts.Read", "Mail.Read", "Files.Read"],
         },
     },
     plugins: [microsoft()],
