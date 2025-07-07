@@ -15,21 +15,16 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
     return {
         id: "microsoft",
         endpoints: {
-            // User.Read scope
-            me: createAuthEndpoint(
-                "/microsoft/me",
-                {
-                    method: "GET",
-                    use: [sessionMiddleware],
-                },
-                async ctx => {
-                    return await makeGraphRequest<"/me", User>(ctx.context, "me", debugLogs, {
-                        method: "GET",
-                        responseType: "single",
-                    });
-                }
-            ),
+            /** ALPHABETIZED by API PERMISSION SCOPE, then by ENDPOINT. CITATION REQUIRED. */
+
+            // ================================
             // Calendars.Read scope
+            // ================================
+
+            /**
+             * Get the user's primary calendar.
+             * @see https://learn.microsoft.com/en-us/graph/api/calendar-get?view=graph-rest-1.0&tabs=http
+             */
             meCalendar: createAuthEndpoint(
                 "/microsoft/me/calendar",
                 {
@@ -43,7 +38,11 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                     });
                 }
             ),
-            // Calendars.Read scope
+
+            /**
+             * Get the user's calendar events.
+             * @see https://learn.microsoft.com/en-us/graph/api/user-list-events?view=graph-rest-1.0&tabs=http
+             */
             meEvents: createAuthEndpoint(
                 "/microsoft/me/events",
                 {
@@ -57,7 +56,15 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                     });
                 }
             ),
+
+            // ================================
             // Contacts.Read scope
+            // ================================
+
+            /**
+             * Get the user's contacts.
+             * @see https://learn.microsoft.com/en-us/graph/api/user-list-contacts?view=graph-rest-1.0&tabs=http
+             */
             meContacts: createAuthEndpoint(
                 "/microsoft/me/contacts",
                 {
@@ -71,7 +78,37 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                     });
                 }
             ),
+
+            // ================================
+            // Files.Read scope
+            // ================================
+
+            /**
+             * Get the user's OneDrive drive.
+             * @see https://learn.microsoft.com/en-us/graph/api/drive-get?view=graph-rest-1.0&tabs=http
+             */
+            meDrive: createAuthEndpoint(
+                "/microsoft/me/drive",
+                {
+                    method: "GET",
+                    use: [sessionMiddleware],
+                },
+                async ctx => {
+                    return await makeGraphRequest<"/me/drive", Drive>(ctx.context, "me/drive", debugLogs, {
+                        method: "GET",
+                        responseType: "single",
+                    });
+                }
+            ),
+
+            // ================================
             // Mail.Read scope
+            // ================================
+
+            /**
+             * Get the user's email messages.
+             * @see https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0&tabs=http
+             */
             meMessages: createAuthEndpoint(
                 "/microsoft/me/messages",
                 {
@@ -85,15 +122,23 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                     });
                 }
             ),
-            // Files.Read scope
-            meDrive: createAuthEndpoint(
-                "/microsoft/me/drive",
+
+            // ================================
+            // User.Read scope
+            // ================================
+
+            /**
+             * Get the current user's profile.
+             * @see https://learn.microsoft.com/en-us/graph/api/user-get?view=graph-rest-1.0&tabs=http
+             */
+            me: createAuthEndpoint(
+                "/microsoft/me",
                 {
                     method: "GET",
                     use: [sessionMiddleware],
                 },
                 async ctx => {
-                    return await makeGraphRequest<"/me/drive", Drive>(ctx.context, "me/drive", debugLogs, {
+                    return await makeGraphRequest<"/me", User>(ctx.context, "me", debugLogs, {
                         method: "GET",
                         responseType: "single",
                     });
