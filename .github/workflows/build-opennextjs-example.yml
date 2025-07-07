@@ -8,7 +8,7 @@ on:
             - "src/**"
             - "tsconfig.json"
             - "examples/opennextjs/**"
-            - ".github/workflows/build-example.yml" # This file
+            - ".github/workflows/build-opennextjs-example.yml" # This file
     pull_request:
         branches: [main]
         paths:
@@ -16,7 +16,7 @@ on:
             - "src/**"
             - "tsconfig.json"
             - "examples/opennextjs/**"
-            - ".github/workflows/build-example.yml" # This file
+            - ".github/workflows/build-opennextjs-example.yml" # This file
     workflow_dispatch:
 
 jobs:
