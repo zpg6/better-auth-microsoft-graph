@@ -86,17 +86,28 @@ That's it! No complex OAuth flows, no token management, no Graph API setup. Just
 
 ## Roadmap
 
+### Core Features & Capabilities
+
 - [x] Basic `/me` endpoints (👤 Profile, 📅 Calendar, 📧 Mail, 👥 Contacts, 💾 OneDrive)
-- [ ] **Graph Query Customizability**
-    - [ ] OData query parameters (`$filter`, `$select`, `$expand`, `$orderby`)
-    - [ ] Pagination support (`$top`, `$skip`, `@odata.nextLink`)
-- [ ] **Real-time Updates with Change Notifications API**
-- [ ] **Joined Teams**
-- [ ] **SharePoint & Files**
-- [ ] **Organization & Directory**
-- [ ] **Planner & Tasks**
-- [ ] **Batch Requests**
-- [ ] **Advanced Outlook**
+- [ ] **Graph Query Customizability** - OData query parameters (`$filter`, `$select`, `$expand`, `$orderby`)
+- [ ] **Pagination Support** - Handle large datasets (`$top`, `$skip`, `@odata.nextLink`)
+- [ ] **Batch Requests** - Multiple API calls in single request (`/$batch`)
+- [ ] **Real-time Updates** - Change notifications and webhooks (`/subscriptions`)
+
+### Endpoint Groups
+
+- [ ] **Users & People** (`/users`, `/me/people`)
+- [ ] **Groups & Group Management** (`/groups`)
+- [ ] **Joined Teams** (`/me/joinedTeams`, `/teams`)
+- [ ] **Teams Chat** (`/me/chats`, `/chats`)
+- [ ] **SharePoint & Files** (`/sites`, `/drives`)
+- [ ] **Advanced Calendar** (`/me/calendars`, `/me/calendarGroups`)
+- [ ] **Advanced Contacts** (`/me/contactFolders`, `/me/contacts`)
+- [ ] **To-Do** (`/me/todo`)
+- [ ] **Planner & Tasks** (`/planner`, `/me/planner`)
+- [ ] **Presence** (`/me/presence`, `/users/{id}/presence`)
+- [ ] **Notebooks** (`/me/onenote`, `/notebooks`)
+- [ ] **Advanced Outlook** (`/me/mailFolders`, `/me/outlook`)
 
 ## Installation
 
