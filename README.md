@@ -90,6 +90,7 @@ That's it! No complex OAuth flows, no token management, no Graph API setup. Just
 - [ ] **Graph Query Customizability**
     - [ ] OData query parameters (`$filter`, `$select`, `$expand`, `$orderby`)
     - [ ] Pagination support (`$top`, `$skip`, `@odata.nextLink`)
+- [ ] **Real-time Updates with Change Notifications API**
 - [ ] **Joined Teams**
 - [ ] **SharePoint & Files**
 - [ ] **Organization & Directory**
