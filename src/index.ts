@@ -4,7 +4,7 @@ import { createAuthEndpoint, sessionMiddleware } from "better-auth/api";
 import { z } from "zod";
 import { makeGraphRequest } from "./endpoint-factory";
 import type { GraphQueryOptions, MicrosoftGraphPluginOptions } from "./types";
-import { GraphQueryOptionsBodySchema } from "./types";
+import { GraphQueryOptionsBodySchema } from "./validation";
 
 /**
  * Microsoft Graph integration for Better Auth
