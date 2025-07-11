@@ -1,8 +1,10 @@
 import type { Calendar, Contact, Drive, Event, Message, User } from "@microsoft/microsoft-graph-types";
 import type { BetterAuthPlugin } from "better-auth";
 import { createAuthEndpoint, sessionMiddleware } from "better-auth/api";
+import { z } from "zod";
 import { makeGraphRequest } from "./endpoint-factory";
-import type { MicrosoftGraphPluginOptions } from "./types";
+import type { GraphQueryOptions, MicrosoftGraphPluginOptions } from "./types";
+import { GraphQueryOptionsBodySchema } from "./types";
 
 /**
  * Microsoft Graph integration for Better Auth
@@ -29,12 +31,15 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                 "/microsoft/me/calendar",
                 {
                     method: "GET",
+                    body: GraphQueryOptionsBodySchema as z.ZodType<GraphQueryOptions>,
                     use: [sessionMiddleware],
                 },
                 async ctx => {
+                    const graphOptions: GraphQueryOptions = ctx.body || {};
                     return await makeGraphRequest<"/me/calendar", Calendar>(ctx.context, "me/calendar", debugLogs, {
                         method: "GET",
                         responseType: "single",
+                        graphOptions,
                     });
                 }
             ),
@@ -47,12 +52,15 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                 "/microsoft/me/events",
                 {
                     method: "GET",
+                    body: GraphQueryOptionsBodySchema as z.ZodType<GraphQueryOptions>,
                     use: [sessionMiddleware],
                 },
                 async ctx => {
+                    const graphOptions: GraphQueryOptions = ctx.body || {};
                     return await makeGraphRequest<"/me/events", Event>(ctx.context, "me/events", debugLogs, {
                         method: "GET",
                         responseType: "array",
+                        graphOptions,
                     });
                 }
             ),
@@ -69,12 +77,15 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                 "/microsoft/me/contacts",
                 {
                     method: "GET",
+                    body: GraphQueryOptionsBodySchema as z.ZodType<GraphQueryOptions>,
                     use: [sessionMiddleware],
                 },
                 async ctx => {
+                    const graphOptions: GraphQueryOptions = ctx.body || {};
                     return await makeGraphRequest<"/me/contacts", Contact>(ctx.context, "me/contacts", debugLogs, {
                         method: "GET",
                         responseType: "array",
+                        graphOptions,
                     });
                 }
             ),
@@ -91,12 +102,15 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                 "/microsoft/me/drive",
                 {
                     method: "GET",
+                    body: GraphQueryOptionsBodySchema as z.ZodType<GraphQueryOptions>,
                     use: [sessionMiddleware],
                 },
                 async ctx => {
+                    const graphOptions: GraphQueryOptions = ctx.body || {};
                     return await makeGraphRequest<"/me/drive", Drive>(ctx.context, "me/drive", debugLogs, {
                         method: "GET",
                         responseType: "single",
+                        graphOptions,
                     });
                 }
             ),
@@ -113,12 +127,15 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                 "/microsoft/me/messages",
                 {
                     method: "GET",
+                    body: GraphQueryOptionsBodySchema as z.ZodType<GraphQueryOptions>,
                     use: [sessionMiddleware],
                 },
                 async ctx => {
+                    const graphOptions: GraphQueryOptions = ctx.body || {};
                     return await makeGraphRequest<"/me/messages", Message>(ctx.context, "me/messages", debugLogs, {
                         method: "GET",
                         responseType: "array",
+                        graphOptions,
                     });
                 }
             ),
@@ -135,12 +152,15 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
                 "/microsoft/me",
                 {
                     method: "GET",
+                    body: GraphQueryOptionsBodySchema as z.ZodType<GraphQueryOptions>,
                     use: [sessionMiddleware],
                 },
                 async ctx => {
+                    const graphOptions: GraphQueryOptions = ctx.body || {};
                     return await makeGraphRequest<"/me", User>(ctx.context, "me", debugLogs, {
                         method: "GET",
                         responseType: "single",
+                        graphOptions,
                     });
                 }
             ),
@@ -150,3 +170,4 @@ export const microsoft = (options: MicrosoftGraphPluginOptions = {}) => {
 
 // Re-export useful types and functions for advanced usage
 export type { GraphApiParams, GraphApiResult } from "./endpoint-factory";
+export type { GraphQueryOptions, ODataQueryParams } from "./types";

@@ -18,6 +18,7 @@ Seamlessly integrate [Better Auth](https://github.com/better-auth/better-auth) w
 - 💾 **OneDrive Integration**: Access drive info with `authClient.microsoft.me.drive()`
 - 🔧 **Full TypeScript Support**: Fully typed with Microsoft Graph types.
 - ⚡ **Better Auth Plugin**: Seamlessly integrates with Better Auth ecosystem.
+- 🔍 **OData Query Support**: Advanced filtering, sorting, and field selection with Microsoft Graph OData parameters.
 
 ## Quick Start
 
@@ -52,7 +53,7 @@ const authClient = createAuthClient({
 });
 ```
 
-### 3. BOOM! 💥 Access Microsoft Graph APIs
+### 3. BOOM! 💥 Access Microsoft Graph APIs client-side
 
 ```typescript
 useEffect(() => {
@@ -62,7 +63,9 @@ useEffect(() => {
         console.log("User:", profile.data?.data?.displayName);
 
         // Get calendar events
-        const events = await authClient.microsoft.me.events();
+        const events = await authClient.microsoft.me.events({
+            query: { $top: 10, $orderby: "start/dateTime desc" },
+        });
         console.log("Upcoming events:", events.data?.data?.length);
 
         // Get email messages
@@ -70,7 +73,9 @@ useEffect(() => {
         console.log("Recent emails:", messages.data?.data?.length);
 
         // Get contacts
-        const contacts = await authClient.microsoft.me.contacts();
+        const contacts = await authClient.microsoft.me.contacts({
+            query: { $filter: "startsWith(displayName,'J')" },
+        });
         console.log("Contacts:", contacts.data?.data?.length);
 
         // Get OneDrive info
@@ -89,7 +94,7 @@ That's it! No complex OAuth flows, no token management, no Graph API setup. Just
 ### Core Features & Capabilities
 
 - [x] Basic `/me` endpoints (👤 Profile, 📅 Calendar, 📧 Mail, 👥 Contacts, 💾 OneDrive)
-- [ ] **Graph Query Customizability** - OData query parameters (`$filter`, `$select`, `$expand`, `$orderby`)
+- [x] **Graph Query Customizability** - OData query parameters (`$filter`, `$select`, `$expand`, `$orderby`)
 - [ ] **Pagination Support** - Handle large datasets (`$top`, `$skip`, `@odata.nextLink`)
 - [ ] **Batch Requests** - Multiple API calls in single request (`/$batch`)
 - [ ] **Real-time Updates** - Change notifications and webhooks (`/subscriptions`)
@@ -131,6 +136,8 @@ bun add better-auth-microsoft-graph
 | `GET /api/auth/microsoft/me/contacts` | `authClient.microsoft.me.contacts()` | User's contacts             |
 | `GET /api/auth/microsoft/me/messages` | `authClient.microsoft.me.messages()` | User's email messages       |
 | `GET /api/auth/microsoft/me/drive`    | `authClient.microsoft.me.drive()`    | User's OneDrive information |
+
+All endpoints support optional `query` parameters for OData customization.
 
 ## Azure App Registration Setup
 
@@ -183,6 +190,50 @@ export const auth = betterAuth({
     ],
 });
 ```
+
+## Advanced Query Customization
+
+Use Microsoft Graph OData query parameters to customize your requests:
+
+```typescript
+// Get only specific user profile fields
+const profile = await authClient.microsoft.me({
+    query: {
+        $select: "displayName,mail,jobTitle,department",
+    },
+});
+
+// Get latest 5 messages with specific fields
+const messages = await authClient.microsoft.me.messages({
+    query: {
+        $top: 5,
+        $select: "subject,from,receivedDateTime,isRead",
+        $orderby: "receivedDateTime desc",
+    },
+});
+
+// Get events with filtering
+const events = await authClient.microsoft.me.events({
+    query: {
+        $filter: "start/dateTime ge '2024-01-01T00:00:00Z'",
+        $orderby: "start/dateTime",
+        $top: 10,
+    },
+});
+```
+
+### Supported OData Parameters
+
+| Parameter  | Description                        | Example                         |
+| ---------- | ---------------------------------- | ------------------------------- |
+| `$select`  | Choose specific fields to return   | `"displayName,mail,jobTitle"`   |
+| `$filter`  | Filter results based on conditions | `"startsWith(displayName,'J')"` |
+| `$orderby` | Sort results by properties         | `"displayName desc"`            |
+| `$top`     | Limit number of results (max 999)  | `10`                            |
+| `$skip`    | Skip results for pagination        | `20`                            |
+| `$expand`  | Include related entities inline    | `"manager,directReports"`       |
+| `$search`  | Search for specific terms          | `"displayName:John"`            |
+| `$count`   | Include total count in response    | `true`                          |
 
 ## License
 

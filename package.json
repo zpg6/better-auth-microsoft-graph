@@ -31,7 +31,8 @@
         "format": "prettier --write ."
     },
     "dependencies": {
-        "@microsoft/microsoft-graph-types": "^2.40.0"
+        "@microsoft/microsoft-graph-types": "^2.40.0",
+        "zod": "^3.25.76"
     },
     "peerDependencies": {
         "better-auth": "^1.2.12"

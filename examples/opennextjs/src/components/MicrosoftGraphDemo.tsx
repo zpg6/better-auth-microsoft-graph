@@ -138,7 +138,10 @@ export default function MicrosoftGraphDemo() {
             callEndpoint<Event[]>(
                 "Events",
                 "events",
-                () => authClient.microsoft.me.events(),
+                () =>
+                    authClient.microsoft.me.events({
+                        query: { $top: 10, $select: "subject,start,end,location" },
+                    }),
                 result => setMicrosoftData(prev => ({ ...prev, events: result }))
             ),
             callEndpoint<Contact[]>(
@@ -150,7 +153,10 @@ export default function MicrosoftGraphDemo() {
             callEndpoint<Message[]>(
                 "Messages",
                 "messages",
-                () => authClient.microsoft.me.messages(),
+                () =>
+                    authClient.microsoft.me.messages({
+                        query: { $top: 5, $orderby: "receivedDateTime desc" },
+                    }),
                 result => setMicrosoftData(prev => ({ ...prev, messages: result }))
             ),
             callEndpoint<Drive>(

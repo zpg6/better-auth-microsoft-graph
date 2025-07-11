@@ -1,4 +1,5 @@
 import type { AuthContext } from "better-auth";
+import type { GraphQueryOptions, ODataQueryParams } from "./types";
 
 export const ERROR_CODES = {
     ACCOUNT_NOT_FOUND: "Microsoft account not found for user",
@@ -39,6 +40,24 @@ export interface GraphApiParams {
 }
 
 /**
+ * Converts OData query parameters to URL search parameters
+ */
+function buildODataParams(odata: ODataQueryParams): Record<string, string> {
+    const params: Record<string, string> = {};
+
+    if (odata.$select) params.$select = odata.$select;
+    if (odata.$filter) params.$filter = odata.$filter;
+    if (odata.$expand) params.$expand = odata.$expand;
+    if (odata.$orderby) params.$orderby = odata.$orderby;
+    if (odata.$top !== undefined) params.$top = odata.$top.toString();
+    if (odata.$skip !== undefined) params.$skip = odata.$skip.toString();
+    if (odata.$search) params.$search = odata.$search;
+    if (odata.$count !== undefined) params.$count = odata.$count.toString();
+
+    return params;
+}
+
+/**
  * Core function to make authenticated requests to Microsoft Graph API
  *
  * @template TResponse - The expected response type
@@ -54,7 +73,7 @@ export async function makeGraphRequest<E extends string, TResponse>(
     options: {
         method?: "GET" | "POST" | "PATCH" | "DELETE";
         responseType: "single";
-        params?: Record<string, string>;
+        graphOptions?: GraphQueryOptions;
         body?: any;
     }
 ): Promise<GraphApiResult<TResponse>>;
@@ -65,7 +84,7 @@ export async function makeGraphRequest<E extends string, TResponse>(
     options: {
         method?: "GET" | "POST" | "PATCH" | "DELETE";
         responseType: "array";
-        params?: Record<string, string>;
+        graphOptions?: GraphQueryOptions;
         body?: any;
     }
 ): Promise<GraphApiResult<TResponse[]>>;
@@ -76,7 +95,7 @@ export async function makeGraphRequest<E extends string, TResponse>(
     options: {
         method?: "GET" | "POST" | "PATCH" | "DELETE";
         responseType: "single" | "array";
-        params?: Record<string, string>;
+        graphOptions?: GraphQueryOptions;
         body?: any;
     }
 ): Promise<GraphApiResult<TResponse | TResponse[]>> {
@@ -132,17 +151,36 @@ export async function makeGraphRequest<E extends string, TResponse>(
 
     // Build URL with query parameters
     let url = `https://graph.microsoft.com/v1.0/${endpoint}`;
-    if (options.params) {
-        const searchParams = new URLSearchParams(options.params);
+
+    // Build query parameters from OData options
+    const allParams: Record<string, string> = {};
+
+    // Add OData query parameters if provided
+    if (options.graphOptions?.query) {
+        const odataParams = buildODataParams(options.graphOptions.query);
+        Object.assign(allParams, odataParams);
+    }
+
+    // Add URL search parameters if any
+    if (Object.keys(allParams).length > 0) {
+        const searchParams = new URLSearchParams(allParams);
         url += `?${searchParams.toString()}`;
+    }
+
+    // Build request headers
+    const headers: Record<string, string> = {
+        Authorization: `Bearer ${account.accessToken}`,
+        "Content-Type": "application/json",
+    };
+
+    // Add custom headers if provided
+    if (options.graphOptions?.headers) {
+        Object.assign(headers, options.graphOptions.headers);
     }
 
     const requestOptions: RequestInit = {
         method: options.method || "GET",
-        headers: {
-            Authorization: `Bearer ${account.accessToken}`,
-            "Content-Type": "application/json",
-        },
+        headers,
     };
 
     if (options.body && (options.method === "POST" || options.method === "PATCH")) {
