@@ -47,6 +47,7 @@
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "cloudflare": "^4.4.1",
         "drizzle-kit": "^0.31.0",
         "prettier": "^3.5.3",
         "tailwindcss": "^4",
