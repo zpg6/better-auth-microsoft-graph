@@ -95,7 +95,7 @@ That's it! No complex OAuth flows, no token management, no Graph API setup. Just
 
 - [x] Basic `/me` endpoints (👤 Profile, 📅 Calendar, 📧 Mail, 👥 Contacts, 💾 OneDrive)
 - [x] **Graph Query Customizability** - OData query parameters (`$filter`, `$select`, `$expand`, `$orderby`)
-- [ ] **Pagination Support** - Handle large datasets (`$top`, `$skip`, `@odata.nextLink`)
+- [x] **Pagination Support** - Handle large datasets (`$top`, `$skip`, `@odata.nextLink`)
 - [ ] **Batch Requests** - Multiple API calls in single request (`/$batch`)
 - [ ] **Real-time Updates** - Change notifications and webhooks (`/subscriptions`)
 
